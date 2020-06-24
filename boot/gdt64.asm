@@ -12,15 +12,15 @@ GDT64:
 	    dw 0                        ; segment limit[15:0]
 	    dw 0                        ; base address[15:0]
 	    db 0                        ; base address[23:16]
-	    db 10011010b                ; A,R,C,1,1,DPL,P
-	    db 10101111b                ; segment limit[19:16],AVL,L,D,G
+	    db 10011000b                ; P,DPL,1,1,C,R,A
+	    db 00100000b                ; G,D,L,AVL,segment limit[19:16]
 	    db 0                        ; base address[31:24]
 
 	.DATASEG: equ $ - GDT64     ; Data-Segment Descriptor
 	    dw 0                        ; segment limit[15:0]
 	    dw 0                        ; base address[15:0]
 	    db 0                        ; base address[23:16]
-	    db 10010010b                ; A,W,E,0,1,DPL,P
+	    db 10010000b                ; P,DPL[],DPL[],1,0,E,W,A
 	    db 00000000b                ; segment limit[19:16],AVL,-,D/B,G
 	    db 0                        ; base address[31:24]
 

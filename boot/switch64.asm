@@ -80,7 +80,7 @@ switch_to_long:
 
 [bits 64]
 init_long:
-	mov ax, GDT64.DATASEG
+	mov ax, 0
 	mov ds, ax
 	mov es, ax
 	mov fs, ax

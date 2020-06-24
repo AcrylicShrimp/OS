@@ -1,38 +1,34 @@
+[bits 64]
+
+VIDEO_MEMORY equ 0xb8000
+WHITE_ON_BLACK equ 0x0f ; the color byte for each character
+
+init_print:
+    mov rsi, VIDEO_MEMORY
+    ret
+
 print:
-    pusha
+    push rax
+    push rbx
 
 ; keep this in mind:
 ; while (string[i] != 0) { print string[i]; i++ }
 
 ; the comparison for string end (null byte)
 start:
-    mov al, [bx] ; 'bx' is the base address for the string
-    cmp al, 0 
+    mov al, [rbx] ; 'rbx' is the base address for the string
+    mov ah, WHITE_ON_BLACK
+
+    cmp al, 0
     je done
 
-    ; the part where we print with the BIOS help
-    mov ah, 0x0e
-    int 0x10 ; 'al' already contains the char
+    mov [rsi], ax
+    add rbx, 1
+    add rsi, 2
 
-    ; increment pointer and do next loop
-    add bx, 1
     jmp start
 
 done:
-    popa
+    pop rbx
+    pop rax
     ret
-
-
-
-print_nl:
-    pusha
-    
-    mov ah, 0x0e
-    mov al, 0x0a ; newline char
-    int 0x10
-    mov al, 0x0d ; carriage return
-    int 0x10
-    
-    popa
-    ret
-	

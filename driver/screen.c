@@ -6,12 +6,11 @@
 
 void clear(void)
 {
-	char *screen	  = (char *)VIDEO_ADDRESS;
-	int	  screen_size = MAX_COLS * MAX_ROWS;
+	int screen_size = MAX_COLS * MAX_ROWS;
 
 	for (int index = 0; index < screen_size; ++index) {
-		screen[index * 2]	  = ' ';
-		screen[index * 2 + 1] = WHITE_ON_BLACK;
+		VIDEO_ADDRESS[index * 2]	 = ' ';
+		VIDEO_ADDRESS[index * 2 + 1] = WHITE_ON_BLACK;
 	}
 
 	set_cursor_offset(calc_offset(0, 0));
@@ -61,13 +60,10 @@ int print_char(char ch, int col, int row, char attr)
 
 	if (offset >= MAX_ROWS * MAX_COLS * 2) {
 		for (int i = 1; i < MAX_ROWS; i++)
-			memory_copy(
-				(const u8 *)(calc_offset(0, i) + VIDEO_ADDRESS),
-				(u8 *)(calc_offset(0, i - 1) + VIDEO_ADDRESS),
-				MAX_COLS * 2);
+			memory_copy(VIDEO_ADDRESS + calc_offset(0, i), VIDEO_ADDRESS + calc_offset(0, i - 1), MAX_COLS * 2);
 
 		/* Blank last line */
-		char *last_line = (char *)(calc_offset(0, MAX_ROWS - 1) + VIDEO_ADDRESS);
+		char *last_line = VIDEO_ADDRESS + calc_offset(0, MAX_ROWS - 1);
 		for (int i = 0; i < MAX_COLS * 2; i++) last_line[i] = 0;
 
 		offset -= 2 * MAX_COLS;
